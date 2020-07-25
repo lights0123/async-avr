@@ -20,12 +20,6 @@ use async_avr::io::{AsyncReadExt, AsyncWriteExt};
 //
 // $ sudo screen /dev/ttyACM0 57600
 
-#[link_name = "__vector_18"]
-pub unsafe extern "avr-interrupt" fn __vector_18() {
-	let mut led: atmega328p_hal::port::portb::PB5<Output> = unsafe { core::mem::zeroed() };
-	led.set_high();
-}
-
 #[no_mangle]
 pub extern "C" fn main() -> ! {
 	let dp = arduino_uno::Peripherals::take().unwrap();
@@ -43,20 +37,18 @@ pub extern "C" fn main() -> ! {
 
 	avr_device::interrupt::enable();
 
-	let mut led = pins.d13.into_output(&mut pins.ddr);
+	pins.d10.into_output(&mut pins.ddr); // SS must be set to output mode.
 
-	// pins.d10.into_output(&mut pins.ddr); // SS must be set to output mode.
-	//
-	// // Create SPI interface.
-	// let mut spi = Spi::new(
-	//     dp.SPI,
-	//     pins.d13.into_output(&mut pins.ddr),
-	//     pins.d11.into_output(&mut pins.ddr),
-	//     pins.d12.into_pull_up_input(&mut pins.ddr),
-	//     Settings::default(),
-	// );
-	//
-	// let mut spi = AsyncSpi::new(spi);
+	// Create SPI interface.
+	let mut spi = Spi::new(
+	    dp.SPI,
+	    pins.d13.into_output(&mut pins.ddr),
+	    pins.d11.into_output(&mut pins.ddr),
+	    pins.d12.into_pull_up_input(&mut pins.ddr),
+	    Settings::default(),
+	);
+
+	let mut spi = AsyncSpi::new(spi);
 
 	let (rx, tx) = serial.split();
 	let mut rx = AsyncSerial::new(rx);
@@ -82,26 +74,26 @@ pub extern "C" fn main() -> ! {
 	};
 
 	let spi_loop = async {
-		// loop {
-		//     // spi.write_all(b"az").await.unwrap();
-		//     let mut data = [0; 2];
-		//     spi.read_exact(&mut data).await.unwrap();
-		//     prio.set(true);
-		//     loop {
-		//         if !serial_lock.get() {
-		//             serial_lock.set(true);
-		//             let mut tx_ref = tx.borrow_mut();
-		//             tx_ref.write_all(b"wrote ").await.unwrap();
-		//             tx_ref.write_all(&data).await.unwrap();
-		//             tx_ref.write_all(b"!\n").await.unwrap();
-		//             serial_lock.set(false);
-		//             break;
-		//         }
-		//         Yield::default().await;
-		//     }
-		//     prio.set(false);
-		//     Yield::default().await;
-		// }
+		loop {
+		    // spi.write_all(b"az").await.unwrap();
+		    let mut data = [0; 2];
+		    spi.read_exact(&mut data).await.unwrap();
+		    prio.set(true);
+		    loop {
+		        if !serial_lock.get() {
+		            serial_lock.set(true);
+		            let mut tx_ref = tx.borrow_mut();
+		            tx_ref.write_all(b"wrote ").await.unwrap();
+		            tx_ref.write_all(&data).await.unwrap();
+		            tx_ref.write_all(b"!\n").await.unwrap();
+		            serial_lock.set(false);
+		            break;
+		        }
+		        Yield::default().await;
+		    }
+		    prio.set(false);
+		    Yield::default().await;
+		}
 	};
 
 	block_on(async { futures_util::join!(serial_loop, spi_loop) });
