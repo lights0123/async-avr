@@ -3,7 +3,7 @@
 [[package]]
 name = "arduino-uno"
 version = "0.1.0"
-source = "git+https://github.com/lights0123/avr-hal?branch=split-serial#471f18e7c31c924f740157edc8248b0a09748810"
+source = "git+https://github.com/Rahix/avr-hal#f500e4e00cca6ee276d955ebf268ce9fd586a133"
 dependencies = [
  "atmega328p-hal",
  "avr-hal-generic",
@@ -26,7 +26,7 @@ dependencies = [
 [[package]]
 name = "atmega328p-hal"
 version = "0.1.0"
-source = "git+https://github.com/lights0123/avr-hal?branch=split-serial#471f18e7c31c924f740157edc8248b0a09748810"
+source = "git+https://github.com/Rahix/avr-hal#f500e4e00cca6ee276d955ebf268ce9fd586a133"
 dependencies = [
  "avr-device",
  "avr-hal-generic",
@@ -44,7 +44,7 @@ dependencies = [
 [[package]]
 name = "avr-hal-generic"
 version = "0.1.0"
-source = "git+https://github.com/lights0123/avr-hal?branch=split-serial#471f18e7c31c924f740157edc8248b0a09748810"
+source = "git+https://github.com/Rahix/avr-hal#f500e4e00cca6ee276d955ebf268ce9fd586a133"
 dependencies = [
  "cfg-if",
  "embedded-hal",
