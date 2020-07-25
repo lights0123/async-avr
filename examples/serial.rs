@@ -51,14 +51,13 @@ pub extern "C" fn main() -> ! {
     let tx = RefCell::new(AsyncSerial::new(tx));
 
     let serial_lock = Cell::new(false);
-    let prio = Cell::new(false);
 
     let serial_loop = async {
         loop {
             let mut b = [0];
             rx.read_exact(&mut b).await.unwrap();
             loop {
-                if !prio.get() && !serial_lock.get() {
+                if !serial_lock.get() {
                     serial_lock.set(true);
                     tx.borrow_mut().write_all(b"hello!\n").await.unwrap();
                     serial_lock.set(false);
@@ -74,7 +73,6 @@ pub extern "C" fn main() -> ! {
             spi.write_all(b"a").await.unwrap();
             let mut data = [0; 1];
             spi.read_exact(&mut data).await.unwrap();
-            prio.set(true);
             loop {
                 if !serial_lock.get() {
                     serial_lock.set(true);
@@ -87,7 +85,6 @@ pub extern "C" fn main() -> ! {
                 }
                 Yield::default().await;
             }
-            prio.set(false);
             Yield::default().await;
         }
     };
