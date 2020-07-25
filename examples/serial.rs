@@ -26,8 +26,6 @@ pub extern "C" fn main() -> ! {
 
     let mut pins = arduino_uno::Pins::new(dp.PORTB, dp.PORTC, dp.PORTD);
 
-    dp.USART0.ucsr0b.write(|w| w.rxcie0().set_bit());
-
     let serial = arduino_uno::Serial::new(
         dp.USART0,
         pins.d0,
@@ -35,9 +33,7 @@ pub extern "C" fn main() -> ! {
         57600,
     );
 
-    avr_device::interrupt::enable();
-
-    pins.d10.into_output(&mut pins.ddr); // SS must be set to output mode.
+    pins.d10.into_output(&mut pins.ddr); // CS must be set to output mode.
 
     // Create SPI interface.
     let spi = Spi::new(
