@@ -14,12 +14,8 @@
 extern crate panic_halt;
 
 use core::cell::{Cell, RefCell};
-use core::ptr::{read_volatile, write_volatile};
 
-use arduino_uno::prelude::*;
 use arduino_uno::spi::{Settings, Spi};
-use avr_hal_generic::nb;
-use avr_hal_generic::port::mode::Output;
 
 use async_avr::io::{AsyncReadExt, AsyncWriteExt};
 use async_avr::{block_on, AsyncSerial, AsyncSpi, Yield};
@@ -32,7 +28,7 @@ pub extern "C" fn main() -> ! {
 
     dp.USART0.ucsr0b.write(|w| w.rxcie0().set_bit());
 
-    let mut serial = arduino_uno::Serial::new(
+    let serial = arduino_uno::Serial::new(
         dp.USART0,
         pins.d0,
         pins.d1.into_output(&mut pins.ddr),
@@ -44,7 +40,7 @@ pub extern "C" fn main() -> ! {
     pins.d10.into_output(&mut pins.ddr); // SS must be set to output mode.
 
     // Create SPI interface.
-    let mut spi = Spi::new(
+    let spi = Spi::new(
         dp.SPI,
         pins.d13.into_output(&mut pins.ddr),
         pins.d11.into_output(&mut pins.ddr),
@@ -56,10 +52,10 @@ pub extern "C" fn main() -> ! {
 
     let (rx, tx) = serial.split();
     let mut rx = AsyncSerial::new(rx);
-    let mut tx = RefCell::new(AsyncSerial::new(tx));
+    let tx = RefCell::new(AsyncSerial::new(tx));
 
-    let mut serial_lock = Cell::new(false);
-    let mut prio = Cell::new(false);
+    let serial_lock = Cell::new(false);
+    let prio = Cell::new(false);
 
     let serial_loop = async {
         loop {
