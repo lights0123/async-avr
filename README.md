@@ -54,7 +54,7 @@ We can compile by running
 cargo --examples --release
 ```
 
-**Note:** If `bash rustup override set nightly` wasn't run used:
+**Note:** If `rustup override set nightly` wasn't run used:
 
 ```bash
 cargo +nightly build --examples --release
