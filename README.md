@@ -30,14 +30,15 @@ Once you have the above path, add it to your path. For example, on macOS or Linu
 `export PATH="$HOME/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin:${PATH}"`.
 
 ## Initial installation
+
 `async-avr` needs nightly rust:
 
 ```bash
 rustup install nightly
 ```
 
-If you don't like typing **+nightly** To set the toolchain version per-directory, go in
-the project directory and run:
+If you don't like typing **+nightly** To set the toolchain version per-directory, go in the project
+directory and run:
 
 ```bash
 # https://doc.rust-lang.org/nightly/edition-guide/rust-2018/rustup-for-managing-rust-versions.html#managing-versions
