@@ -19,9 +19,12 @@ ufmt = "0.1.0"
 
 [profile.dev]
 panic = "abort"
-incremental = false
 lto = true
+opt-level = "s"
 
 [profile.release]
 panic = "abort"
+codegen-units = 1
+debug = true
 lto = true
+opt-level = "s"
