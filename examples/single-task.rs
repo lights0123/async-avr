@@ -11,8 +11,8 @@ extern crate panic_halt;
 use async_avr::io::AsyncWriteExt;
 use async_avr::{block_on, AsyncSerial};
 
-#[no_mangle]
-pub extern "C" fn main() -> ! {
+#[arduino_uno::entry]
+fn main() -> ! {
     let dp = arduino_uno::Peripherals::take().unwrap();
 
     let mut pins = arduino_uno::Pins::new(dp.PORTB, dp.PORTC, dp.PORTD);

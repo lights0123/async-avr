@@ -20,8 +20,8 @@ use arduino_uno::spi::{Settings, Spi};
 use async_avr::io::{AsyncReadExt, AsyncWriteExt};
 use async_avr::{block_on, AsyncSerial, AsyncSpi, Yield};
 
-#[no_mangle]
-pub extern "C" fn main() -> ! {
+#[arduino_uno::entry]
+fn main() -> ! {
     let dp = arduino_uno::Peripherals::take().unwrap();
 
     let mut pins = arduino_uno::Pins::new(dp.PORTB, dp.PORTC, dp.PORTD);
