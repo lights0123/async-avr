@@ -1,24 +1,10 @@
 # async-avr
 
 ## Initial installation
-
-```bash
-# rustfmt is not yet available for Rust since this was written, so we need to pass --force
-rustup install --force nightly-2020-07-24
-rustup install nightly
-rustup +nightly component add rustfmt
-rustup +nightly-2020-07-24 component add rust-src
-cargo install form svd2rust atdf2svd
-pip3 install --user pyyaml
-```
-
-In the future, when `rustfmt` is available for nightly builds after 2020-07-24:
+`async-avr` needs nightly rust:
 
 ```bash
 rustup install nightly
-rustup +nightly component add rustfmt rust-src
-cargo install form svd2rust atdf2svd
-pip3 install --user pyyaml
 ```
 
 ## Compiling and Running
@@ -26,10 +12,10 @@ pip3 install --user pyyaml
 We can compile by running
 
 ```bash
-cargo +nightly-2020-07-24 build -Z build-std=core --release --target avr-atmega328p.json
+cargo +nightly build -Z build-std=core --release --target avr-atmega328p.json
 ```
 
-(just `+nightly` when `rustfmt` is available for nightly builds after 2020-07-24). Then, to upload it to a device, enable "Show verbose output during: upload" in the Arduino IDE. Observe the build logs for an `avrdude` command—it should look something like:
+Then, to upload it to a device, enable "Show verbose output during: upload" in the Arduino IDE. Observe the build logs for an `avrdude` command—it should look something like:
 
 ```bash
 /path/to/.arduino15/packages/arduino/tools/avrdude/6.3.0-arduino17/bin/avrdude -C/path/to/.arduino15/packages/arduino/tools/avrdude/6.3.0-arduino17/etc/avrdude.conf -v -patmega328p -carduino -P/dev/ttyACM0 -b115200 -D -Uflash:w:/tmp/arduino_build_721874/Blink.ino.hex:i
