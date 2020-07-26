@@ -1,5 +1,16 @@
 # async-avr
 
+## Required packages
+Arch linux
+```bash
+sudo pacman -S avr-gcc avr-libc avrdude python-pip
+```
+
+Ubuntu
+```bash
+sudo apt-get install binutils gcc-avr avr-libc avrdude python3-pip
+```
+
 ## Initial installation
 
 ```bash
@@ -20,13 +31,23 @@ rustup +nightly component add rustfmt rust-src
 cargo install form svd2rust atdf2svd
 pip3 install --user pyyaml
 ```
-
+If you don't like typing **+nightly-2020-07-24**
+To set the toolchain version per-directory, go in the project directory and run:
+```bash
+# https://doc.rust-lang.org/nightly/edition-guide/rust-2018/rustup-for-managing-rust-versions.html#managing-versions
+rustup override set nightly-2020-07-24
+```
 ## Compiling and Running
 
 We can compile by running
 
 ```bash
-cargo +nightly-2020-07-24 build -Z build-std=core --release --target avr-atmega328p.json
+cargo --examples --release 
+```
+
+**Note:** If ```bash rustup override set nightly-2020-07-24``` wasn't run use:
+```bash
+cargo +nightly-2020-07-24 build --examples --release
 ```
 
 (just `+nightly` when `rustfmt` is available for nightly builds after 2020-07-24). Then, to upload it to a device, enable "Show verbose output during: upload" in the Arduino IDE. Observe the build logs for an `avrdude` command—it should look something like:
