@@ -35,6 +35,7 @@ Once you have the above path, add it to your path. For example, on macOS or Linu
 
 ```bash
 rustup install nightly
+rustup +nightly component add rust-src
 ```
 
 If you don't like typing **+nightly** To set the toolchain version per-directory, go in the project
