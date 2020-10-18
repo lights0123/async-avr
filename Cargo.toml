@@ -9,9 +9,9 @@ edition = "2018"
 
 [dependencies]
 panic-halt = "0.2.0"
-avr-hal-generic = { git = "https://github.com/Rahix/avr-hal" }
-arduino-uno = { git = "https://github.com/Rahix/avr-hal" }
-atmega328p-hal = { git = "https://github.com/Rahix/avr-hal" }
+avr-hal-generic = { git = "https://github.com/Rahix/avr-hal", rev = "7337cd76cd96f2d27701b137396d94a06d3a501d" }
+arduino-uno = { git = "https://github.com/Rahix/avr-hal", rev = "7337cd76cd96f2d27701b137396d94a06d3a501d" }
+atmega328p-hal = { git = "https://github.com/Rahix/avr-hal", rev = "7337cd76cd96f2d27701b137396d94a06d3a501d" }
 avr-device = "0.2.2"
 pin-utils = "0.1.0"
 futures-util = { version = "0.3.5", default-features = false, features = ["async-await-macro"] }
