@@ -2,16 +2,27 @@
 
 ## Required packages
 
-Arch linux
+**Arch linux**
 
 ```bash
 sudo pacman -S avr-gcc avr-libc avrdude python-pip
 ```
 
-Ubuntu
+**Ubuntu**
 
 ```bash
 sudo apt-get install binutils gcc-avr avr-libc avrdude python3-pip
+```
+
+**macOS**
+
+```bash
+brew tap osx-cross/avr
+# removal needed before upgrading
+brew remove avr-gcc avr-binutils avr-libc
+# avr-libc is now included in avr-gcc
+brew install avr-gcc avr-binutils
+brew install avrdude
 ```
 
 Alternatively, on a different OS or if you don't want to install system packages, you may use the
@@ -31,30 +42,27 @@ Once you have the above path, add it to your path. For example, on macOS or Linu
 
 ## Initial installation
 
-`async-avr` needs nightly rust:
+`async-avr` needs nightly rust, as of beginning 2021 a special release even see Rahix/avr-hal#124
 
-```bash
-rustup install nightly
-rustup +nightly component add rust-src
+create a file called `rust-toolchain` with the contents:
+
+```toml
+[toolchain]
+channel = "nightly-2021-01-07"
+components = ["rust-src"]
 ```
 
-If you don't like typing **+nightly** To set the toolchain version per-directory, go in the project
-directory and run:
-
-```bash
-# https://doc.rust-lang.org/nightly/edition-guide/rust-2018/rustup-for-managing-rust-versions.html#managing-versions
-rustup override set nightly
-```
+this file allows you to run all cargo commands with that nightly release automatically selected.
 
 ## Compiling and Running
 
 We can compile by running
 
 ```bash
-cargo --examples --release
+cargo build --examples --release
 ```
 
-**Note:** If `rustup override set nightly` wasn't run used:
+**Note:** If you didn't create `rust-toolchain` this might work:
 
 ```bash
 cargo +nightly build --examples --release
