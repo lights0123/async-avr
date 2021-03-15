@@ -11,10 +11,11 @@
 #![no_main]
 #![feature(abi_avr_interrupt)]
 
-extern crate panic_halt;
+use panic_halt as _;
 
 use core::cell::{Cell, RefCell};
 
+use arduino_uno::prelude::*;
 use arduino_uno::spi::{Settings, Spi};
 
 use async_avr::io::{AsyncReadExt, AsyncWriteExt};
@@ -30,17 +31,16 @@ fn main() -> ! {
         dp.USART0,
         pins.d0,
         pins.d1.into_output(&mut pins.ddr),
-        57600,
+        57600.into_baudrate(),
     );
 
-    pins.d10.into_output(&mut pins.ddr); // CS must be set to output mode.
-
     // Create SPI interface.
-    let spi = Spi::new(
+    let (spi, _) = Spi::new(
         dp.SPI,
         pins.d13.into_output(&mut pins.ddr),
         pins.d11.into_output(&mut pins.ddr),
         pins.d12.into_pull_up_input(&mut pins.ddr),
+        pins.d10.into_output(&mut pins.ddr),
         Settings::default(),
     );
 

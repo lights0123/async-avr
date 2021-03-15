@@ -6,7 +6,9 @@
 #![no_std]
 #![no_main]
 
-extern crate panic_halt;
+use panic_halt as _;
+
+use arduino_uno::prelude::*;
 
 use async_avr::io::AsyncWriteExt;
 use async_avr::{block_on, AsyncSerial};
@@ -21,7 +23,7 @@ fn main() -> ! {
         dp.USART0,
         pins.d0,
         pins.d1.into_output(&mut pins.ddr),
-        57600,
+        57600.into_baudrate(),
     ));
 
     block_on(async {
