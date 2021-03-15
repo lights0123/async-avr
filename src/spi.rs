@@ -2,7 +2,6 @@ use crate::io;
 
 use avr_hal_generic::hal;
 use avr_hal_generic::nb;
-use avr_hal_generic::nb::Error;
 use core::pin::Pin;
 use core::task::{Context, Poll};
 
@@ -25,7 +24,7 @@ impl<T: hal::spi::FullDuplex<u8> + Unpin> io::AsyncRead for AsyncSpi<T> {
 
     fn poll_read(
         mut self: Pin<&mut Self>,
-        cx: &mut Context<'_>,
+        _cx: &mut Context<'_>,
         buf: &mut [u8],
     ) -> Poll<Result<usize, T::Error>> {
         if let Some(ptr) = buf.first_mut() {
@@ -48,7 +47,7 @@ impl<T: hal::spi::FullDuplex<u8> + Unpin> io::AsyncWrite for AsyncSpi<T> {
 
     fn poll_write(
         mut self: Pin<&mut Self>,
-        cx: &mut Context<'_>,
+        _cx: &mut Context<'_>,
         buf: &[u8],
     ) -> Poll<Result<usize, T::Error>> {
         if let Some(byte) = buf.first() {
@@ -62,11 +61,11 @@ impl<T: hal::spi::FullDuplex<u8> + Unpin> io::AsyncWrite for AsyncSpi<T> {
         }
     }
 
-    fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
+    fn poll_flush(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
         Poll::Ready(Ok(()))
     }
 
-    fn poll_close(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
+    fn poll_close(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
         Poll::Ready(Ok(()))
     }
 }
