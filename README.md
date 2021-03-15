@@ -42,7 +42,7 @@ Once you have the above path, add it to your path. For example, on macOS or Linu
 
 ## Initial installation
 
-`async-avr` needs nightly rust, as of beginning 2021 a special release even see Rahix/avr-hal#124
+`async-avr` needs nightly rust, as of beginning 2021 a special release even see [Rahix/avr-hal#124](https://github.com/Rahix/avr-hal/issues/124)
 
 create a file called `rust-toolchain` with the contents:
 
