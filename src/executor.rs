@@ -1,7 +1,6 @@
 use core::cell::UnsafeCell;
 use core::future::Future;
 use core::ptr;
-use core::sync::atomic::{AtomicBool, Ordering};
 use core::task::{Context, Poll, RawWaker, RawWakerVTable, Waker};
 use pin_utils::pin_mut;
 

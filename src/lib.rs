@@ -4,10 +4,7 @@ use core::pin::Pin;
 use core::task::{Context, Poll};
 
 use avr_hal_generic::hal;
-use avr_hal_generic::hal::serial::{Read, Write};
 use avr_hal_generic::nb;
-use avr_hal_generic::nb::Error;
-use core::borrow::BorrowMut;
 
 mod executor;
 pub mod io;
@@ -35,7 +32,7 @@ impl<T: hal::serial::Read<u8> + Unpin> io::AsyncRead for AsyncSerial<T> {
 
     fn poll_read(
         mut self: Pin<&mut Self>,
-        cx: &mut Context<'_>,
+        _cx: &mut Context<'_>,
         buf: &mut [u8],
     ) -> Poll<Result<usize, T::Error>> {
         if let Some(ptr) = buf.first_mut() {
@@ -58,7 +55,7 @@ impl<T: hal::serial::Write<u8> + Unpin> io::AsyncWrite for AsyncSerial<T> {
 
     fn poll_write(
         mut self: Pin<&mut Self>,
-        cx: &mut Context<'_>,
+        _cx: &mut Context<'_>,
         buf: &[u8],
     ) -> Poll<Result<usize, T::Error>> {
         if let Some(byte) = buf.first() {
@@ -72,7 +69,7 @@ impl<T: hal::serial::Write<u8> + Unpin> io::AsyncWrite for AsyncSerial<T> {
         }
     }
 
-    fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
+    fn poll_flush(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
         match self.0.flush() {
             Ok(()) => Poll::Ready(Ok(())),
             Err(nb::Error::WouldBlock) => Poll::Pending,
@@ -80,7 +77,7 @@ impl<T: hal::serial::Write<u8> + Unpin> io::AsyncWrite for AsyncSerial<T> {
         }
     }
 
-    fn poll_close(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
+    fn poll_close(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), T::Error>> {
         Poll::Ready(Ok(()))
     }
 }
@@ -96,7 +93,7 @@ impl Default for Yield {
 impl Future for Yield {
     type Output = ();
 
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
         if self.0 {
             Poll::Ready(())
         } else {
