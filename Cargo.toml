@@ -17,6 +17,11 @@ pin-utils = "0.1.0"
 futures-util = { version = "0.3.5", default-features = false, features = ["async-await-macro"] }
 ufmt = "0.1.0"
 
+[dependencies.arduino-hal]
+git = "https://github.com/rahix/avr-hal"
+rev = "f84c0dff774c2292bc932b670955165161ecc7d1"
+features = ["arduino-uno"]
+
 [profile.dev]
 panic = "abort"
 lto = true
