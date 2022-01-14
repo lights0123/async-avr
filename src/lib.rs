@@ -13,6 +13,8 @@ pub use executor::block_on;
 use futures_util::future::Future;
 pub use spi::AsyncSpi;
 
+pub mod timer;
+
 pub struct AsyncSerial<T>(T);
 
 impl<T> AsyncSerial<T> {
